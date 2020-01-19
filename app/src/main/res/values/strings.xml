@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">TACETController</string>
-    <string name="main_title">This is a test for the app</string>
+    <string name="main_title">How to use the app:</string>
+    <string name="switch_name">Device power</string>
+    <string name="info_app">
+        Use the \'Device power\' button to activate the machine.
+        Use the included music file manager to select the music,
+        and select \'Submit\' to send the music to the machine.
+    </string>
+    <string name="submit_button">Submit</string>
 </resources>
