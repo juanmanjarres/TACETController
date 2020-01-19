@@ -23,7 +23,5 @@ public class MainActivity extends AppCompatActivity {
             // code to start the machine
             System.out.println("Machine is on");
         }
-
-
     }
 }
