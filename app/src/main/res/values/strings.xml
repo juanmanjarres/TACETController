@@ -7,5 +7,5 @@
         Use the included music file manager to select the music,
         and select \'Submit\' to send the music to the machine.
     </string>
-    <string name="submit_button">Submit</string>
+    <string name="openfile_button">Open File</string>
 </resources>

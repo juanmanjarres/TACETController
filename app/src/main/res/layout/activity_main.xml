@@ -22,29 +22,25 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
         android:gravity="start"
         android:text="@string/switch_name"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/info_appTextView"
-        app:layout_constraintVertical_bias="0.069" />
+        app:layout_constraintTop_toBottomOf="@+id/info_appTextView" />
 
     <TextView
         android:id="@+id/info_appTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:text="@string/info_app"
+        android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -52,14 +48,13 @@
         app:layout_constraintTop_toBottomOf="@+id/title_textView" />
 
     <Button
-        android:id="@+id/submit_btn"
+        android:id="@+id/openfile_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit_button"
+        android:text="@string/openfile_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/power_switch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
