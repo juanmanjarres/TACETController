@@ -7,12 +7,17 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
 import java.util.Set;
 
+
 public class MainActivity extends AppCompatActivity {
+
+    // request code for selecting a music file
+    private static final int PICK_MUSIC_FILE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +45,21 @@ public class MainActivity extends AppCompatActivity {
 
         Button openfile_btn = (Button) findViewById(R.id.openfile_btn);
 
-        //openfile_btn.setOnClickListener(new OnClickListener() {
+        // makes a listener for the open file button
+        openfile_btn.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v){
+                openMusicFile();
+            }
+        });
+    }
 
-        //});
+
+    private void openMusicFile(){
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("audio/*");
+
+        startActivityForResult(intent, PICK_MUSIC_FILE);
     }
 
 
