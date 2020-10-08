@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">TACETController</string>
     <string name="main_title">How to use the app:</string>
-    <string name="switch_name">Device power</string>
+    <string name="switch_name">Bluetooth connection</string>
     <string name="info_app">
-        Use the \'Device power\' button to activate the machine.
+        Use the \'Bluetooth connection\' button to connect to the machine.
         Use the included music file manager to select the music,
         and select \'Submit\' to send the music to the machine.
     </string>
     <string name="openfile_button">Open File</string>
+    <string name="test_button">Test</string>
 </resources>
