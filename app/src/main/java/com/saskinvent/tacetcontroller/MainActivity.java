@@ -4,19 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import java.net.URI;
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
     // request code for selecting a music file
     private BluetoothConnection connection;
+    ArrayList<MusicFile> musicFileList;
     private static final int PICK_MUSIC_FILE = 2;
 
 
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         power_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 if (isChecked) {
+
                     BluetoothDevice device = connection.useBluetooth(current);
                     System.out.println("Bluetooth enabled");
                     if (device == null){
@@ -46,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                         //return;
                     }
+
                     else{
                         if (!connection.BTconnect()){
                             Toast.makeText(getApplicationContext(), "Bluetooth device not connected",
@@ -67,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // makes a listener for the open file button
         openfile_btn.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v){
-                openMusicFile();
+                readMusic();
             }
         });
 
@@ -84,12 +94,40 @@ public class MainActivity extends AppCompatActivity {
      * Initiates a new activity for the user to open a music file.
      */
     // Note: should it maybe return the music file afterwards?
-    private void openMusicFile(){
+    private void readMusic(){
+        ContentResolver contentResolver = getContentResolver();
+
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
+        String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
+        Cursor cursor = contentResolver.query(uri, null, selection, null, sortOrder);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            musicFileList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+
+                // Save to audioList
+                musicFileList.add(new MusicFile(data, title, album, artist));
+            }
+        }
+
+        cursor.close();
+
+        /*
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("audio/*");
 
         startActivityForResult(intent, PICK_MUSIC_FILE);
+
+        Uri musicPath = intent.getData();
+
+        MusicFile audio = new MusicFile(musicPath);
+        */
     }
 
 
