@@ -7,6 +7,11 @@
         Use the included music file manager to select the music,
         and select \'Submit\' to send the music to the machine.
     </string>
+    <string name="no_music">No music loaded</string>
+
     <string name="openfile_button">Open File</string>
     <string name="test_button">Test</string>
+    <string name="play_button">Play</string>
+    <string name="pause_button">Pause</string>
+
 </resources>

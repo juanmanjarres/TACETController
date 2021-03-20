@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO does this work?
         final Activity current = this;
+
 
         // initiate the switch
         final Switch power_switch = findViewById(R.id.power_switch);
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
      * Initiates a new activity for the user to open a music file.
      */
     // Note: should it maybe return the music file afterwards?
-    private void readMusic(){
+    private void readMusic(){/*
         ContentResolver contentResolver = getContentResolver();
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -116,25 +117,62 @@ public class MainActivity extends AppCompatActivity {
         }
 
         cursor.close();
+        */
 
-        /*
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("audio/*");
 
         startActivityForResult(intent, PICK_MUSIC_FILE);
 
-        Uri musicPath = intent.getData();
-
-        MusicFile audio = new MusicFile(musicPath);
-        */
     }
+
 
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
+        String path = data.getDataString();
+        Uri musicPath = Uri.parse(path);
+        //Uri musicPath = data.getData();
+
+        musicFileList = new ArrayList<>();
+        String[] proj = { MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Artists.ARTIST };
+
+        System.out.println(musicPath);
+        ContentResolver contentResolver = getContentResolver();
+
+        Cursor tempCursor = contentResolver.query(musicPath,
+                proj, null, null, null);
+        tempCursor.moveToFirst();
+        String title;
+        String artist;
+
+        int col_index=-1;
+        //int numSongs=tempCursor.getCount();
+        int currentNum=0;
+
+        do{
+            col_index = tempCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
+            title = tempCursor.getString(col_index);
+            col_index = tempCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST);
+            artist = tempCursor.getString(col_index);
+
+            currentNum++;
+        }while(tempCursor.moveToNext());
+
+
+        System.out.println(title);
+        TextView song_name = (TextView)findViewById(R.id.currentSong);
+        song_name.setText(title);
+
+        musicFileList.add(new MusicFile(musicPath, title, artist));
+
+        musicFileList.get(0);
     }
 
 }

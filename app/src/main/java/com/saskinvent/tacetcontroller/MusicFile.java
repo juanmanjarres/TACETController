@@ -7,23 +7,21 @@ import java.io.Serializable;
 public class MusicFile implements Serializable {
 
 
-    private String data;
+    private Uri data;
     private String title;
-    private String album;
     private String artist;
 
-    public MusicFile(String data, String title, String album, String artist) {
+    public MusicFile(Uri data, String title, String artist) {
         this.data = data;
         this.title = title;
-        this.album = album;
         this.artist = artist;
     }
 
-    public String getData() {
+    public Uri getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Uri data) {
         this.data = data;
     }
 
@@ -33,14 +31,6 @@ public class MusicFile implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
     }
 
     public String getArtist() {
