@@ -5,7 +5,7 @@
     <string name="info_app">
         Use the \'Bluetooth connection\' button to connect to the machine.
         Use the included music file manager to select the music,
-        and select \'Submit\' to send the music to the machine.
+        and select \'Play\' to play the music to the machine.
     </string>
     <string name="no_music">No music loaded</string>
 

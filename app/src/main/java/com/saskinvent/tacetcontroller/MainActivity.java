@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     // request code for selecting a music file
     private BluetoothConnection connection;
-    ArrayList<MusicFile> musicFileList;
+    MusicFile currentSong;
     private static final int PICK_MUSIC_FILE = 2;
 
 
@@ -95,30 +96,7 @@ public class MainActivity extends AppCompatActivity {
      * Initiates a new activity for the user to open a music file.
      */
     // Note: should it maybe return the music file afterwards?
-    private void readMusic(){/*
-        ContentResolver contentResolver = getContentResolver();
-
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
-        String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
-        Cursor cursor = contentResolver.query(uri, null, selection, null, sortOrder);
-
-        if (cursor != null && cursor.getCount() > 0) {
-            musicFileList = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-
-                // Save to audioList
-                musicFileList.add(new MusicFile(data, title, album, artist));
-            }
-        }
-
-        cursor.close();
-        */
-
+    private void readMusic(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("audio/*");
@@ -135,44 +113,29 @@ public class MainActivity extends AppCompatActivity {
 
         String path = data.getDataString();
         Uri musicPath = Uri.parse(path);
-        //Uri musicPath = data.getData();
-
-        musicFileList = new ArrayList<>();
-        String[] proj = { MediaStore.Audio.Media._ID,
-                MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Artists.ARTIST };
 
         System.out.println(musicPath);
-        ContentResolver contentResolver = getContentResolver();
 
-        Cursor tempCursor = contentResolver.query(musicPath,
-                proj, null, null, null);
-        tempCursor.moveToFirst();
+        MediaMetadataRetriever mediaRet = new MediaMetadataRetriever();
+        mediaRet.setDataSource(this, musicPath);
         String title;
         String artist;
-
-        int col_index=-1;
-        //int numSongs=tempCursor.getCount();
-        int currentNum=0;
-
-        do{
-            col_index = tempCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
-            title = tempCursor.getString(col_index);
-            col_index = tempCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST);
-            artist = tempCursor.getString(col_index);
-
-            currentNum++;
-        }while(tempCursor.moveToNext());
+        try{
+           title = mediaRet.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+           artist = mediaRet.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        } catch (Exception e){
+            title = "Unknown title";
+            artist = "Unknown artist";
+        }
 
 
         System.out.println(title);
         TextView song_name = (TextView)findViewById(R.id.currentSong);
         song_name.setText(title);
+        TextView artist_name = (TextView)findViewById(R.id.artistName);
+        artist_name.setText(artist);
 
-        musicFileList.add(new MusicFile(musicPath, title, artist));
-
-        musicFileList.get(0);
+        currentSong = new MusicFile(Uri.parse(path), title, artist);
     }
 
 }
